@@ -8,7 +8,6 @@ def specificVersion = calculateVersion()
 def isDevelopBuild = rootProject.version.contains('develop')
 
 apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'tech.pegasys'
@@ -22,7 +21,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.google.guava:guava:18.0'
+  implementation 'com.google.guava:guava:18.0'
 
   testImplementation 'org.assertj:assertj-core:3.16.1'
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
@@ -55,25 +54,7 @@ artifacts {
     archives javadocJar
 }
 
-wrapper {
-    gradleVersion = "6.5.1"
-    distributionType = Wrapper.DistributionType.ALL
-}
-
-def cloudsmithUser = project.hasProperty('cloudsmithUser') ? project.property('cloudsmithUser') : System.getenv('CLOUDSMITH_USER')
-def cloudsmithKey = project.hasProperty('cloudsmithApiKey') ? project.property('cloudsmithApiKey') : System.getenv('CLOUDSMITH_API_KEY')
-
 publishing {
-  repositories {
-    maven {
-      name = "cloudsmith"
-      url = "https://api-g.cloudsmith.io/maven/consensys/maven/"
-      credentials {
-        username = cloudsmithUser
-        password = cloudsmithKey
-      }
-    }
-  }
   publications {
     mavenJava(MavenPublication) {
       groupId "tech.pegasys"
